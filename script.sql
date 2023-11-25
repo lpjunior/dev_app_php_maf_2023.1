@@ -28,6 +28,9 @@ CREATE TABLE books (
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
+insert into books(title, author, isbn, year_published, quantity)
+value ('Senhor da Guerra (Crônicas Saxônicas)', 'Berbard Cornwell', '978-6555872392', 2021, 5);
+
 CREATE TABLE reservations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,

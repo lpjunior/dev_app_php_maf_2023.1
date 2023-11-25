@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -57,5 +57,23 @@ class User extends Authenticatable
     public function isClient(): bool 
     {
         return $this->type === UserType::CLIENT->value;
+    }
+
+    // relacionamento entre Livro e Reserva
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    // relacionamento entre Livro e Emprestimo
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+    // relacionamento entre Livro e Avaliacao
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
