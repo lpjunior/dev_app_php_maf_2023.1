@@ -5,6 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+enum ReservationType: string {
+    case ACTIVE = 'active';
+    case EXPIRED = 'expired';
+    case CANCELED = 'canceled';
+}
+
 class Reservation extends Model
 {
     use HasFactory;
@@ -19,5 +25,17 @@ class Reservation extends Model
     public function book()
     {
         return $this->belongsTo(Book::class);
+    }
+
+    public function isActive() {
+        return $this->status == ReservationType::ACTIVE->value;
+    }
+
+    public function isCanceled() {
+        return $this->status == ReservationType::CANCELED->value;
+    }
+
+    public function isExpired() {
+        return $this->status == ReservationType::EXPIRED->value;
     }
 }

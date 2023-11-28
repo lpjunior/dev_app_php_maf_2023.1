@@ -7,15 +7,22 @@ COLLATE utf8mb4_unicode_ci;
 USE biblioteca_app;
 
 -- criação das tabelas;
+
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS loans;
+DROP TABLE IF EXISTS reservations;
+
 CREATE OR REPLACE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
+    email_verified_at TIMESTAMP NULL,
     password VARCHAR(255) NOT NULL,
-    type ENUM('client', 'admin') DEFAULT 'client'
-)
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
+    type ENUM('client', 'admin') DEFAULT 'client',
+    remember_token VARCHAR(100) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE books (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,8 +40,8 @@ value ('Senhor da Guerra (Crônicas Saxônicas)', 'Berbard Cornwell', '978-65558
 
 CREATE TABLE reservations (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    book_id INT,
+    user_id bigint(20),
+    book_id bigint(20),
     reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expiration_date TIMESTAMP NULL,
     status ENUM('active', 'expired', 'canceled'),
@@ -73,7 +80,7 @@ COLLATE utf8mb4_unicode_ci;
 delimiter //
 
 CREATE TRIGGER add_48_hours_before_joinning
-BEFORE INSERT ON reservations 
+BEFORE INSERT ON reservations
 FOR EACH ROW
 BEGIN
     IF NEW.expiration_date IS NULL THEN
