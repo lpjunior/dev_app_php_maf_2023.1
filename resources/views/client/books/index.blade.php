@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="container">
+    <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Books</li>
+            </ol>
+        </nav>
         <h1>Livros Disponíveis</h1>
         <div class="row">
             @foreach ($books as $book)

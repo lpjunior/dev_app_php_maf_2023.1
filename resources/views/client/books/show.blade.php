@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url('/') }}">Books</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Book</li>
+                <li class="breadcrumb-item"><a href="{{ route('client.reserve.form', $book) }}">Reserve</a></li>
+            </ol>
+        </nav>
         <!-- Detalhes do livro -->
         <h1>{{ $book->title }}</h1>
         <p>Autor: {{ $book->author }}</p>
@@ -22,6 +29,12 @@
             </div>
         @endif
         
-        <a href="{{ route('client.reserve.form', $book) }}" class="btn btn-primary">Reservar Livro</a>
+        @if($book->quantity <= 0)
+        <a href="{{ route('client.reserve.form', $book) }}" class="btn btn-dark">Reservar Livro</a>
+        @endif
+        @if($book->quantity > 0)
+        <a href="{{ route('client.loan.form', $book) }}" class="btn btn-dark">Empréstimo Livro</a>
+        @endif
+        <a href="{{ url()->previous() }}" class="link-dark">Voltar</a>
     </div>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Loan;
 use App\Models\ReservationType;
 use App\Models\Reservation;
 use Auth;
@@ -34,10 +35,11 @@ class ClientController extends Controller
     */
     public function showReservationForm(Book $book)
     {
-        if ($book->quantidade == 0) {
+        if ($book->quantity == 0) {
             return view('client.books.reserve.form', compact('book'));
         }
-        return redirect()->back()->with('error', 'Livro disponível para empréstimo.');
+
+        return redirect()->back()->with('error', 'Livro disponível para reserva.');
     }
 
     /**
@@ -58,8 +60,6 @@ class ClientController extends Controller
             $reservation->expiration_date = now()->addDays(2);
             $reservation->save();
 
-            print("teste");
-
             return redirect()->route('client.reservations')->with('success','Reserva realizada com sucesso.');
         } else {
             return redirect()->back()->with('error', 'Este livro está disponível e não pode ser reservado.');
@@ -73,5 +73,79 @@ class ClientController extends Controller
     {
         $reservations = Auth::user()->reservations;
         return view('client.reservations.index', compact('reservations'));
+    }
+
+    /**
+    * Mostrar formulário para fazer um emprestimo
+    */
+    public function showLoanForm(Book $book)
+    {
+        if ($book->quantity <= 0) {
+            return back()->with('error', 'Livro não está disponível para empréstimo.');
+        }
+
+        return view('client.books.loan.form', compact('book'));
+    }
+
+        /**
+     * Realizar uma reserva
+     *
+     * @param Request $request
+     * @param Book $book
+     * @return RedirectResponse
+     */
+    public function loan(Request $request, Book $book)
+    {
+        if($book->quantity <= 0) {
+            return redirect()->back()->with('error', 'Este livro está indisponível e não pode ser emprestado.');
+        }
+
+        $loan = new Loan();
+        $loan->user_id = Auth::id();
+        $loan->book_id = $book->id;
+        $loan->loan_date = now();
+        $loan->return_date = now()->addDays(7);
+        $loan->save();
+
+        // Atualiza a quantidade do livro
+        $book->decrement('quantity');
+
+        return redirect()->route('client.loans')->with('success','Empréstimo realizado com sucesso.');
+    }
+
+    /**
+     * Exibir empréstimos do usuário
+     */
+    public function loans()
+    {
+        $loans = Auth::user()->loans;
+        return view('client.loans.index', compact('loans'));
+    }
+
+    /**
+     * Devolver um livro emprestado
+     */
+    public function returnLoan(Request $request, $loanId)
+    {
+        $loan = Loan::where('id', $loanId)->where('user_id', Auth::id())->firstOrFail();
+
+        if(!$loan) 
+        {
+            return redirect()->back()->with('error','Empréstimo não encontrado ou não corresponde ao usuário');
+        }
+
+        if($loan->returned) 
+        {
+            return redirect()->back()->with('error','Este livro já foi devolvido');
+        }
+
+        $loan->returned = true;
+        $loan->return_date = now();
+        $loan->save();
+
+        // Atualiza a quantidade do livro
+        $loan->book->increment('quantity');
+
+        return redirect()->route('client.loans')->with('success','Livro devolvido com sucesso.');
     }
 }
