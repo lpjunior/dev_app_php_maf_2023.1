@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,4 +64,30 @@ Route::group(['middleware' => ['auth']], function () {
     
     // Listagem de empréstimos
     Route::get('/client/loans', [ClientController::class,'loans'])->name('client.loans');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Rotas do Administrador
+|--------------------------------------------------------------------------
+*/
+Route::group(['middleware' => ['auth']], function () {
+    // Listar todos os livros
+    Route::get('/admin/books', [BookController::class,'index'])->name('admin.books.index');
+    
+    // Formulário para criar um novo livro
+    Route::get('/admin/books/create', [BookController::class,'create'])->name('admin.books.create');
+    
+    // Enviar novo livro
+    Route::post('/admin/books/create', [BookController::class,'store'])->name('admin.books.create');    
+    
+    // Formulário para editar livro
+    Route::get('/admin/books/edit/{book}', [BookController::class, 'edit'])->name('admin.books.edit');
+
+    // Enviar livro editado
+    
+    Route::put('/admin/books/edit/{book}', [BookController::class,'update'])->name('admin.books.edit');
+
+    // Enviar exclusão do livro
+    Route::delete('/admin/books/{book}', [BookController::class,'delete'])->name('admin.books.delete');
 });

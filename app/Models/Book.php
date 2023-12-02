@@ -10,7 +10,14 @@ class Book extends Model
     use HasFactory;
 
     protected $fillable = ['title', 'author','isbn','year_published','quantity'];
-
+    
+    /**
+     * Atributos que devem ser convertidos para tipos nativos
+     */
+    protected $casts = [
+                        'year_published' => 'integer',
+                        'quantity' => 'integer'
+                    ];
     // relacionamento entre Livro e Reserva
     public function reservations()
     {

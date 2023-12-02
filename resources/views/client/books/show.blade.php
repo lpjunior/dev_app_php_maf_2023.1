@@ -6,7 +6,6 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/') }}">Books</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Book</li>
-                <li class="breadcrumb-item"><a href="{{ route('client.reserve.form', $book) }}">Reserve</a></li>
             </ol>
         </nav>
         <!-- Detalhes do livro -->
@@ -18,17 +17,16 @@
 
         <!-- Exibir Mensagens de Sucesso ou Erro -->
         @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
         @endif
         
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         @if($book->quantity <= 0)
         <a href="{{ route('client.reserve.form', $book) }}" class="btn btn-dark">Reservar Livro</a>
         @endif

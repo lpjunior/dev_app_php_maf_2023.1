@@ -24,8 +24,8 @@
             @forelse ($loans as $loan)
                 <li class="list-group-item">
                     <h5 class="mb-1">Livro: {{ $loan->book->title }}</h5>
-                    <p class="mb-1">Data empréstimo: {{ $loan->loan_date }}</p>
-                    <p class="mb-1">Data de Devolução Prevista: {{ $loan->return_date }}</p>
+                    <p class="mb-1">Data empréstimo: {{ date('d/m/Y', strtotime($loan->loan_date)) }}</p>
+                    <p class="mb-1">Data de Devolução Prevista: {{ date('d/m/Y', strtotime($loan->return_date)) }}</p>
                     @if(!$loan->returned)
                     <form method="post" action="{{ route('client.returnLoan', $loan->id ) }}">
                         @csrf
