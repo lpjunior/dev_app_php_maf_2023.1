@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +38,7 @@ Route::get('/books/{book}', [ClientController::class,'show'])->name('client.book
 */
 
 // Página Principal
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +46,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['auth']], function () {
+Route::middleware(['client'])->group(function() {    
+    // Dashboard Admin
+    Route::get('/client/dashboard', [ClientController::class,'dashboard'])->name('client.dashboard');
+
     // Formulário para fazer reserva
     Route::get('/books/{book}/reserve', [ClientController::class,'showReservationForm'])->name('client.reserve.form');
     
@@ -71,7 +77,9 @@ Route::group(['middleware' => ['auth']], function () {
 | Rotas do Administrador
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => ['auth']], function () {
+Route::middleware(['admin'])->group(function() {    
+    // Dashboard Admin
+    Route::get('/admin/dashboard', [AdminController::class,'dashboard'])->name('admin.dashboard');
     // Listar todos os livros
     Route::get('/admin/books', [BookController::class,'index'])->name('admin.books.index');
     
@@ -85,9 +93,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/books/edit/{book}', [BookController::class, 'edit'])->name('admin.books.edit');
 
     // Enviar livro editado
-    
     Route::put('/admin/books/edit/{book}', [BookController::class,'update'])->name('admin.books.edit');
 
     // Enviar exclusão do livro
     Route::delete('/admin/books/{book}', [BookController::class,'delete'])->name('admin.books.delete');
+
+    // Exibir Relatório de livros mais emprestados
+    Route::get('/admin/reports/most-borrowed-books', [ReportController::class, 'mostBorrowedBooks'])->name('admin.reports.most-borrowed-books');
+
+    // Exibir Relatório de usuários mais ativos
+    Route::get('/admin/reports/most-active-users', [ReportController::class, 'mostActiveUsers'])->name('admin.reports.most-active-users');
 });

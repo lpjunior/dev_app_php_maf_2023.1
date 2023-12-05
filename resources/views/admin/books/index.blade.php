@@ -36,11 +36,19 @@
                         @csrf
                         @method('DELETE')
                     </form>
-                    <a class="btn btn-link" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $book->id }}').submit()">Excluir <i class="fa-solid fa-trash"></i></a>
+                    <a class="btn btn-link" href="#" onclick="confirmDeletion('{{ $book->id }}')">Excluir <i class="fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+    <script>
+        function confirmDeletion(bookId) {
+            if(confirm('Tem certeza que deseja excluir este livro?'))
+            {
+                document.getElementById('delete-form-' + bookId).submit();
+            }
+        }
+    </script>
 @endsection

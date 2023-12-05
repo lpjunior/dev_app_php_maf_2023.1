@@ -9,10 +9,15 @@ class AdminController extends Controller
     /**
      * Exibe o painel de controle do administrador
     */
-    public function index()
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    public function dashboard()
     {
         return view('admin.dashboard');
     }
     
-    // Gestão de Usuários e Gestão de relatórios
+    // Gestão de relatórios
 }

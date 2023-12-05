@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Log;
 
 class BookController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Exibe uma lista de todos os livros
     */
@@ -30,7 +35,7 @@ class BookController extends Controller
     */
     public function store(Request $request)
     {
-        //dd($request->all());
+        //dd($request->all()); # Log Debug
         $request->validate([
             'title' => 'required|string|min:3|max:255',
             'author' => 'required|string|min:3|max:100',
@@ -40,7 +45,7 @@ class BookController extends Controller
         ]);
 
         Book::create($request->all());
-        Log::info("[BookController][store] - Payload: {$request->all()}");
+        Log::info("[BookController][store] - Payload: {json_encode($request->all())}");
         return redirect()->route('admin.books.index')->with('success', 'Livro adicionado com sucesso.');
     }
 

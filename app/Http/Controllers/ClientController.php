@@ -12,6 +12,13 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    /**
+     * Exibe o painel de controle do cliente
+    */
+    public function dashboard()
+    {
+        return view('client.dashboard');
+    }
 
     /**
     * Exibir uma lista de todos os livros
