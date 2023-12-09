@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | Rotas de Autenticação
 |--------------------------------------------------------------------------
 */
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +47,7 @@ Route::get('/home', [HomeController::class, 'index']);
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['client'])->group(function() {    
+Route::middleware(['verified', 'client'])->group(function() {    
     // Dashboard Admin
     Route::get('/client/dashboard', [ClientController::class,'dashboard'])->name('client.dashboard');
 
@@ -83,7 +83,7 @@ Route::middleware(['client'])->group(function() {
 | Rotas do Administrador
 |--------------------------------------------------------------------------
 */
-Route::middleware(['admin'])->group(function() {    
+Route::middleware(['verified', 'admin'])->group(function() {    
     // Dashboard Admin
     Route::get('/admin/dashboard', [AdminController::class,'dashboard'])->name('admin.dashboard');
     // Listar todos os livros

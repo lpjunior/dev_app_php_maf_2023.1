@@ -1,5 +1,54 @@
 @extends('layouts.app')
 
+<style>
+    .reviews-section {
+        margin-top: 2rem;
+    }
+    
+    .reviews-section h3 {
+        margin-bottom: 1rem;
+    }
+
+    .reviews-section .review-item {
+        border-left: 4px solid #f5eb3b;
+        background-color: #f5f6f7;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 0.25rem;
+    }
+
+    .reviews-section .review-item p {
+        margin-bottom: 0.5rem;
+    }
+
+    .reviews-section .rating-stars {
+        color: #f5eb3b;
+        margin-right: 0.5rem;
+    }
+
+    .reviews-section .rating-stars .fa-star {
+        margin-right: 0.25rem;
+    }
+
+    .reviews-section .review-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .reviews-section .review-author {
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+    }
+
+    .reviews-section .review-date {
+        text-align: right;
+        font-size: 0.85rem;
+        color: #666;
+    }
+</style>
+
 @section('content')
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -48,13 +97,17 @@
             @else
                 <div class="list-group">
                 @foreach($book->reviews as $review)
-                    <div class="list-group-item list-group-item-action flex-column align-items-start">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">Avaliado por {{ $review->user->name }}</h5>
-                            <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
+                    <div class="review-item">
+                        <div class="review-meta">
+                            <h5 class="review-author">Avaliado por {{ $review->user->name }}</h5>
+                            <small class="review-date">{{ $review->created_at->diffForHumans() }}</small>
                         </div>
-                        <p class="mb-1">{{ $review->comment }}</p>
-                        <small>Rating: {{ $review->rating }}</small>
+                        <p>{{ $review->comment }}</p>
+                        <div class="rating-stars">
+                            @for($i = 0; $i < $review->rating; $i++)
+                                <span class="fa fa-star"></span>
+                            @endfor
+                        </div>
                     </div>
                 @endforeach
                 </div>

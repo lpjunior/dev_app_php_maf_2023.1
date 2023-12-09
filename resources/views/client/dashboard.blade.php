@@ -9,9 +9,9 @@
                     Profile
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><a href="#">Editar Perfil</a></li>
-                    <li class="list-group-item"><a href="client/loans">Visualizar Empréstimos</a></li>
-                    <li class="list-group-item"><a href="client/reservations">Visualizar Reservas</a></li>
+                    <li class="list-group-item"><a href="peril">Editar Perfil</a></li>
+                    <li class="list-group-item"><a href="loans">Visualizar Empréstimos</a></li>
+                    <li class="list-group-item"><a href="reservations">Visualizar Reservas</a></li>
                 </ul>
             </div>
         </div>

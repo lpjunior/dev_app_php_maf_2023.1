@@ -9,6 +9,7 @@ enum ReservationType: string {
     case ACTIVE = 'active';
     case EXPIRED = 'expired';
     case CANCELED = 'canceled';
+    case COMPLETED = 'completed';
 }
 
 class Reservation extends Model
@@ -37,5 +38,9 @@ class Reservation extends Model
 
     public function isExpired() {
         return $this->status == ReservationType::EXPIRED->value;
+    }
+
+    public function isCompleted() {
+        return $this->status == ReservationType::COMPLETED->value;
     }
 }

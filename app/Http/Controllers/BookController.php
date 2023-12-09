@@ -73,7 +73,7 @@ class BookController extends Controller
 
 
         $book->update($request->all());
-        Log::info("[BookController][update] - Payload: {$request->all()}");
+        Log::info("[BookController][update] - Payload: {json_encode($request->all())}");
         return redirect()->route('admin.books.index')->with('success', 'Livro atualizado com sucesso.');
     }
 

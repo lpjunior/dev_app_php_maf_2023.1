@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BookAvailableMail;
 use App\Models\Book;
 use App\Models\Loan;
 use App\Models\ReservationType;
 use App\Models\Reservation;
+use App\Models\User;
 use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Mail;
 
 class ClientController extends Controller
 {
@@ -58,13 +61,19 @@ class ClientController extends Controller
      */
     public function reserve(Request $request, Book $book)
     {
+        $user = auth()->user();
+
+        if(!$user->canReserveBook()) {
+            return redirect()->back()->with('error', "Você não pode efetuar reservas até {$user->reservation_ban_until->format('d/m/Y')}.");
+        }
+
         if($book->quantity <= 0) {
             $reservation = new Reservation();
             $reservation->user_id = Auth::id();
             $reservation->book_id = $book->id;
             $reservation->reservation_date = now();
-            $reservation->status = ReservationType::ACTIVE;
-            $reservation->expiration_date = now()->addDays(2);
+            $reservation->status = ReservationType::ACTIVE->value;
+            $reservation->expiration_date = null;
             $reservation->save();
 
             return redirect()->route('client.reservations')->with('success','Reserva realizada com sucesso.');
@@ -94,7 +103,7 @@ class ClientController extends Controller
         return view('client.books.loan.form', compact('book'));
     }
 
-        /**
+     /**
      * Realizar uma reserva
      *
      * @param Request $request
@@ -103,12 +112,32 @@ class ClientController extends Controller
      */
     public function loan(Request $request, Book $book)
     {
+        $user = auth()->user();
+
         if($book->quantity <= 0) {
             return redirect()->back()->with('error', 'Este livro está indisponível e não pode ser emprestado.');
         }
+        
+        $reservation = Reservation::where('user_id', $user->id)
+                                  ->where('book_id', $book->id)
+                                  ->where(function($query){
+                                        $query->where('status', ReservationType::ACTIVE->value)
+                                              ->orWhere('status', ReservationType::EXPIRED->value);
+                                    })
+                                  ->first();
+
+        if($reservation && now()->gt($reservation->expiration_date))
+        {
+            $user->incrementFailedReservations();
+            
+            $reservation->status = ReservationType::EXPIRED->value;
+            $reservation->save();
+
+            return redirect()->route('client.loans')->with('error','Sua reserva está expirada.');
+        }
 
         $loan = new Loan();
-        $loan->user_id = Auth::id();
+        $loan->user_id = $user->id;
         $loan->book_id = $book->id;
         $loan->loan_date = now();
         $loan->return_date = now()->addDays(7);
@@ -117,6 +146,16 @@ class ClientController extends Controller
         // Atualiza a quantidade do livro
         $book->decrement('quantity');
 
+        if($reservation)
+        {
+            // Finaliza a reserva
+            $reservation->expiration_date = null;
+            $reservation->status = ReservationType::COMPLETED->value;
+            $reservation->save();
+
+            // Envia um e-mail de notificação
+
+        }                   
         return redirect()->route('client.loans')->with('success','Empréstimo realizado com sucesso.');
     }
 
@@ -152,6 +191,23 @@ class ClientController extends Controller
 
         // Atualiza a quantidade do livro
         $loan->book->increment('quantity');
+
+        // Verifica se existem reservas pendentes para o livro
+        $reservation = Reservation::where('book_id', $loan->book_id)
+        ->where('status', ReservationType::ACTIVE->value)
+        ->first();
+
+        if($reservation)
+        {
+            // Defini a data de expiração para 48h
+            $reservation->expiration_date = now()->addDays(2);
+            $reservation->save();
+
+            // Envia um e-mail de notificação
+            $book = Book::where('id', $loan->book_id)->first();
+            $user = User::where('id', $loan->user_id)->first();
+            Mail::to($user)->send(new BookAvailableMail($user, $book));
+        }
 
         return redirect()->route('client.loans')->with('success','Livro devolvido com sucesso.');
     }
