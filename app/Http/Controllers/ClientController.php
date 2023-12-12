@@ -63,6 +63,15 @@ class ClientController extends Controller
     {
         $user = auth()->user();
 
+        $existingReservation = Reservation::where('user_id', $user->id)
+                                          ->where('book_id', $book->id)
+                                          ->where('status', ReservationType::ACTIVE->value)
+                                          ->first();
+        
+        if($existingReservation) {
+            return redirect()->back()->with('error', 'Você já possui uma reserva ativa para este livro.');
+        }
+
         if(!$user->canReserveBook()) {
             return redirect()->back()->with('error', "Você não pode efetuar reservas até {$user->reservation_ban_until->format('d/m/Y')}.");
         }
@@ -96,7 +105,17 @@ class ClientController extends Controller
     */
     public function showLoanForm(Book $book)
     {
+        $user = auth()->user();
+        
         if ($book->quantity <= 0) {
+            $reservation = Reservation::where('user_id', $user->id)
+                                      ->where('book_id', $book->id)
+                                      ->where('status', ReservationType::ACTIVE->value)
+                                      ->first();
+
+            if(!$reservation) {
+                return redirect()->back()->with('error', 'O livro está indisponível e você não possui nenhuma reserva para este livro.');
+            }
             return back()->with('error', 'Livro não está disponível para empréstimo.');
         }
 

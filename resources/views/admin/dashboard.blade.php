@@ -30,8 +30,8 @@
                     Usuários
                 </div>
                 <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="#">Listar Usuários</a></li>
-                    <li class="list-group-item"><a href="#">Cadastrar Usuário</a></li>
+                <li class="list-group-item"><a href="users">Listar Usuários</a></li>
+                    <li class="list-group-item"><a href="users/create">Cadastrar Usuário</a></li>
                 </ul>
             </div>
         </div>

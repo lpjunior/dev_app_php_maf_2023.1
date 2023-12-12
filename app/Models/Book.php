@@ -9,7 +9,7 @@ class Book extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'author','isbn','year_published','quantity'];
+    protected $fillable = ['title', 'author','isbn','year_published','quantity', 'cover_url'];
     
     /**
      * Atributos que devem ser convertidos para tipos nativos

@@ -5,7 +5,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.books.index') }}">Books</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            <li class="breadcrumb-item active" aria-current="page">Create</li>
         </ol>
     </nav>
     <h1>Criar um novo Livro</h1>
@@ -53,6 +53,15 @@
             <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="inputQuantity" name="quantity" value="{{ old('quantity') }}" aria-describedby="quantityHelp">
             <div id="quantityHelp" class="form-text">A quantidade deve ser entre 0 e 5.</div>
             @error('quantity')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="inputCoverUrl" class="form-label">Capa</label>
+            <input type="url" class="form-control @error('cover_url') is-invalid @enderror" id="inputCoverUrl" name="cover_url" value="{{ old('cover_url') }}" aria-describedby="coverUrlHelp">
+            <div id="coverUrlHelp" class="form-text">A URL deve ser válida.</div>
+            @error('cover_url')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

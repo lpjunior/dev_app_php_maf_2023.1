@@ -47,6 +47,12 @@
         font-size: 0.85rem;
         color: #666;
     }
+
+    .img-top {
+        width: auto !important;
+        height: 300px !important;
+        object-fit: cover !important;
+    }
 </style>
 
 @section('content')
@@ -75,6 +81,7 @@
             <div class="col-md-8">
                 <!-- Detalhes do livro -->
                 <h2 class="display-4">{{ $book->title }}</h2>
+                <img class="img-top" src="{{ $book->cover_url }}" alt="{{ $book->cover_url }}" />
                 <p class="text-muted">Autor: {{ $book->author }}</p>
                 <p>Ano de Publicação: <span class="text-secondary">{{ $book->year_published }}</span></p>
                 <p>ISBN: <span class="text-secondary">{{ $book->isbn }}</span></p>
@@ -82,10 +89,10 @@
             </div>
             <div class="col-md-4 text-md-right">
                 @if($book->quantity <= 0)
-                <a href="{{ route('client.reserve.form', $book) }}" class="btn btn-dark">Reservar Livro</a>
+                <a href="{{ route('client.loan.form', $book) }}" class="btn btn-dark">Pegar Empréstimo</a>
                 @endif
                 @if($book->quantity > 0)
-                <a href="{{ route('client.loan.form', $book) }}" class="btn btn-dark">Pegar Empréstimo</a>
+                <a href="{{ route('client.reserve.form', $book) }}" class="btn btn-dark">Reservar Livro</a>
                 @endif
             </div>
         </div>

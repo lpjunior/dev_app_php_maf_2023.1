@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -86,6 +87,7 @@ Route::middleware(['verified', 'client'])->group(function() {
 Route::middleware(['verified', 'admin'])->group(function() {    
     // Dashboard Admin
     Route::get('/admin/dashboard', [AdminController::class,'dashboard'])->name('admin.dashboard');
+    
     // Listar todos os livros
     Route::get('/admin/books', [BookController::class,'index'])->name('admin.books.index');
     
@@ -109,4 +111,22 @@ Route::middleware(['verified', 'admin'])->group(function() {
 
     // Exibir Relatório de usuários mais ativos
     Route::get('/admin/reports/most-active-users', [ReportController::class, 'mostActiveUsers'])->name('admin.reports.most-active-users');
+
+        // Listar todos os usuarios
+        Route::get('/admin/users', [UserController::class,'index'])->name('admin.users.index');
+    
+        // Formulário para criar um novo usuario
+        Route::get('/admin/users/create', [UserController::class,'create'])->name('admin.users.create');
+        
+        // Enviar novo usuario
+        Route::post('/admin/users/create', [UserController::class,'store'])->name('admin.users.create');    
+        
+        // Formulário para editar usuario
+        Route::get('/admin/users/edit/{user}', [UserController::class, 'edit'])->name('admin.users.edit');
+    
+        // Enviar usuario editado
+        Route::put('/admin/users/edit/{user}', [UserController::class,'update'])->name('admin.users.edit');
+    
+        // Enviar exclusão do usuario
+        Route::delete('/admin/users/{user}', [UserController::class,'delete'])->name('admin.users.delete');
 });

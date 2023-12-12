@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Reservation;
+use App\Rules\ValidISBN;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -39,9 +41,10 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|min:3|max:255',
             'author' => 'required|string|min:3|max:100',
-            'isbn' => ['required', 'string', 'regex:/^\d{10}(\d{3})?$/', 'unique:books'],
+            'isbn' => ['required', 'string', 'regex:/^\d{10}(\d{3})?$/', 'unique:books', new ValidISBN()],
             'year_published' => 'required|integer|before_or_equal:' . now()->year,
-            'quantity' => 'required|integer|min:0|max:5'
+            'quantity' => 'required|integer|min:0|max:5',
+            'cover_url' => 'nullable|url'
         ]);
 
         Book::create($request->all());
@@ -66,9 +69,10 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|min:3|max:255',
             'author' => 'required|string|min:3|max:100',
-            'isbn' => ['required', 'string', 'regex:/^\d{10}(\d{3})?$/', 'unique:books,isbn,' . $book->id],
+            'isbn' => ['required', 'string', 'regex:/^\d{10}(\d{3})?$/', 'unique:books,isbn,' . $book->id, new ValidISBN()],
             'year_published' => 'required|integer|before_or_equal:' . now()->year,
-            'quantity' => 'required|integer|min:0|max:5'
+            'quantity' => 'required|integer|min:0|max:5',
+            'cover_url' => 'nullable|url'
         ]);
 
 
@@ -84,5 +88,15 @@ class BookController extends Controller
     {
         $book->delete();
         return redirect()->route('admin.books.index')->with('success', 'Livro excluído com sucesso.');
+    }
+
+    public function createBookTest()
+    {
+        Book::factory()->count(10)->create();
+    }
+
+    public function createReservationTest()
+    {
+        Reservation::factory()->count(20)->create();
     }
 }
