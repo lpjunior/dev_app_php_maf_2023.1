@@ -82,7 +82,7 @@ class UserController extends Controller
     */
     public function editPassword(User $user)
     {
-        return view('admin.users.edit.password', compact('$user'));
+        return view('admin.users.edit.password', compact('user'));
     }
 
     /**

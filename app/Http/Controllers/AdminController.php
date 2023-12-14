@@ -15,12 +15,12 @@ class AdminController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function dashboard()
     {
         return view('admin.dashboard');
     }
-    
+
     /**
      * Mostra o formulário para editar de um administrador existente.
     */
@@ -53,7 +53,7 @@ class AdminController extends Controller
     */
     public function editPassword(User $user)
     {
-        return view('admin.perfil.edit.password', compact('$user'));
+        return view('admin.perfil.edit.password', compact('user'));
     }
 
     /**
