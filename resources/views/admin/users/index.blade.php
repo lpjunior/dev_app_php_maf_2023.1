@@ -46,10 +46,10 @@
         </table>
     </div>
     <script>
-        function confirmDeletion(bookId) {
-            if(confirm('Tem certeza que deseja excluir este livro?'))
+        function confirmDeletion(userId) {
+            if(confirm('Tem certeza que deseja excluir este usuário?'))
             {
-                document.getElementById('delete-form-' + bookId).submit();
+                document.getElementById('delete-form-' + userId).submit();
             }
         }
     </script>

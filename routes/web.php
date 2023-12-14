@@ -160,7 +160,4 @@ Route::middleware(['verified', 'admin'])->group(function() {
 
     // Enviar senha editada
     Route::put('/admin/users/{user}/password', [UserController::class,'updatePassword'])->name('admin.users.edit.password');
-
-    // Enviar exclusão do usuário
-    Route::delete('/admin/users/{user}', [BookController::class,'delete'])->name('admin.users.delete');
 });
