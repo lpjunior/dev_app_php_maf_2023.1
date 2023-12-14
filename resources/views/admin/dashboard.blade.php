@@ -9,7 +9,7 @@
                     Profile
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><a href="#">Editar Perfil</a></li>
+                    <li class="list-group-item"><a href="{{ route('admin.perfil.edit', Auth::user()) }}">Editar Perfil</a></li>
                 </ul>
             </div>
         </div>

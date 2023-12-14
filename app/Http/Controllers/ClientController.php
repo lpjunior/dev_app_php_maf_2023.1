@@ -23,6 +23,11 @@ class ClientController extends Controller
         return view('client.dashboard');
     }
 
+    public function editPerfil(User $user)
+    {
+        return view('client.perfil', compact('user'));
+    }
+
     /**
     * Exibir uma lista de todos os livros
     */

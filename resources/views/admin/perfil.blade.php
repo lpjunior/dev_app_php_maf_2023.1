@@ -2,14 +2,8 @@
 
 @section('content')
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Users</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ $user->name }}</li>
-        </ol>
-    </nav>
-    <h1>Editar usuário {{ $user->name }}</h1>
-    <form method="post" action="{{ route('admin.users.create') }}">
+    <h1>Editar Perfil</h1>    
+    <form id="form1" action="{{ route('admin.perfil.edit', $user) }}" method="post">
         @csrf
         @method('PUT')
 
@@ -31,32 +25,7 @@
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="inputPassword" class="form-label">Password</label>
-            <input type="password" class="form-control @error('password') is-invalid @enderror" id="inputPassword" name="password" value="{{ old('password') }}" aria-describedby="passwordHelp">
-            <div id="passwordHelp" class="form-text">A senha deve ter um mínimo de 8 caracteres.</div>
-            @error('password')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Perfil</label>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="type" id="inputType1" value="client" {{ old('type', $user->type) == 'client' ? 'checked' : '' }} />
-                <label class="form-check-label" for="inputType1">
-                    Cliente
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="type" id="inputType2" value="admin" {{ old('type', $user->type) == 'admin' ? 'checked' : '' }} />
-                <label class="form-check-label" for="inputType2">
-                    Administrador
-                </label>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-dark">Cadastrar</button>
+        <button form="form1" type="submit" class="btn btn-dark">Cadastrar</button>
         <a href="{{ route('admin.users.index') }}" class="btn btn-link">Cancelar</a>
     </form>
 
@@ -77,7 +46,7 @@
                 <div class="modal-header">
                 </div>
                 <div class="modal-body">
-                <form id="form2" action="{{ route('admin.users.edit.password', $user) }}" method="post">
+                <form id="form2" action="{{ route('admin.perfil.edit.password', $user) }}" method="post">
                     @csrf
                     @method('PUT')
 
@@ -105,5 +74,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

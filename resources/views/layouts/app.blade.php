@@ -58,7 +58,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/perfil">Perfil</a>
+                                @if(Auth::user()->type == 'admin')    
+                                    <a class="dropdown-item" href="{{ route('admin.perfil.edit', Auth::user()) }}">Perfil</a>
+                                @endif
+                                @if(Auth::user()->type == 'client')    
+                                    <a class="dropdown-item" href="{{ route('client.perfil.edit', Auth::user()) }}">Perfil</a>
+                                @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
