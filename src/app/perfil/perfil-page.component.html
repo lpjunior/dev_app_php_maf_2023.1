@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Perfil do Usuário</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Perfil</ion-card-subtitle>
+      <ion-card-title>{{ userData.name }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item>
+          <ion-icon name="mail" slot="start"></ion-icon>
+          <ion-label>Email</ion-label>
+          <ion-text>{{ userData.email }}</ion-text>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="person" slot="start"></ion-icon>
+          <ion-label>Tipo de Usuário</ion-label>
+          <ion-text>{{ userData.type | titlecase }}</ion-text>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="time" slot="start"></ion-icon>
+          <ion-label>Reservas não Retiradas</ion-label>
+          <ion-text>{{ userData.failed_reservations_count }}</ion-text>
+        </ion-item>
+
+        <ion-item *ngIf="userData.reservation_ban_until">
+          <ion-icon name="ban" slot="start"></ion-icon>
+          <ion-label>Banimento de Reserva Até</ion-label>
+          <ion-text>{{ userData.reservation_ban_until | date: 'mediumDate' }}</ion-text>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

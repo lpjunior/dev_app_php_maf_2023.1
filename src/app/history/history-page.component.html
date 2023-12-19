@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Histórico</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let item of historyData?.data">
+      <ion-label class="ion-text-wrap">
+        <h2>{{ item.book.title }}</h2>
+        <p>Autor: {{ item.book.author }}</p>
+
+        <ng-container *ngIf="item.loan_date">
+          <p>Emprestimo em: {{ item.loan_date | date: 'medium' }}</p>
+        </ng-container>
+        <ng-container *ngIf="item.return_date">
+          <p>Devolvido em: {{ item.return_date | date: 'medium' }}</p>
+        </ng-container>
+        <ng-container *ngIf="item.returned !== null">
+          <p>Status: {{ item.returned ? 'Devolvido' : 'Não Devolvido' }}</p>
+        </ng-container>
+
+        <ng-container *ngIf="item.reservation_date">
+          <p>Reserva feita em: {{ item.reservation_date | date: 'medium' }}</p>
+        </ng-container>
+        <ng-container *ngIf="item.expiration_date">
+          <p>Expirou em: {{ item.expiration_date | date: 'medium' }}</p>
+        </ng-container>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="pagination-buttons">
+    <ion-button *ngIf="historyData?.prev_page_url" (click)="changePage(historyData.prev_page_url)">
+      Anterior
+    </ion-button>
+    <ion-button *ngIf="historyData?.next_page_url" (click)="changePage(historyData.next_page_url)">
+      Próximo
+    </ion-button>
+  </div>
+</ion-content>

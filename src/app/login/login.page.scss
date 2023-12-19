@@ -1,0 +1,33 @@
+/* login.page.scss */
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 20px;
+
+  ion-img {
+    max-width: 150px; // Ajuste conforme o tamanho do seu logo
+    margin-bottom: 30px;
+  }
+
+  ion-item {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --inner-padding-end: 8px;
+    --inner-padding-start: 8px;
+    --min-height: 40px;
+    margin-bottom: 15px;
+  }
+
+  ion-button {
+    --border-radius: 8px;
+  }
+}
+
+ion-content {
+  --background: url('./assets/background.jpg') no-repeat center center / cover;
+}
+

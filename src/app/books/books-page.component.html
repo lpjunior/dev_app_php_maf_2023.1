@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Biblioteca
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list lines="full">
+    <ion-item *ngFor="let book of dataBook?.data" detail>
+      <ion-thumbnail slot="start">
+        <img [src]="book.cover_url" alt="Capa do livro">
+      </ion-thumbnail>
+      <ion-label>
+        <h3>{{ book.title }}</h3>
+        <p>Autor: {{ book.author }}</p>
+        <ion-note>ISBN: {{ book.isbn }}</ion-note>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-row class="ion-padding">
+    <ion-col size="6">
+      <ion-button *ngIf="dataBook?.previousPage" (click)="loadPage(dataBook.previousPage)" expand="block" fill="outline" color="dark">
+        Anterior
+      </ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button *ngIf="dataBook?.nextPage" (click)="loadPage(dataBook.nextPage)" expand="block" color="dark">
+        Próximo
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title size="small">
+      Total de Livros: {{ dataBook?.total }}
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>
