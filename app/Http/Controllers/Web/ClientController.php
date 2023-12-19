@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Mail\BookAvailableMail;
 use App\Models\Book;
 use App\Models\Loan;
-use App\Models\ReservationType;
 use App\Models\Reservation;
+use App\Models\ReservationType;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\RedirectResponse;
@@ -72,7 +73,7 @@ class ClientController extends Controller
                                           ->where('book_id', $book->id)
                                           ->where('status', ReservationType::ACTIVE->value)
                                           ->first();
-        
+
         if($existingReservation) {
             return redirect()->back()->with('error', 'Você já possui uma reserva ativa para este livro.');
         }
@@ -111,7 +112,7 @@ class ClientController extends Controller
     public function showLoanForm(Book $book)
     {
         $user = auth()->user();
-        
+
         if ($book->quantity <= 0) {
             $reservation = Reservation::where('user_id', $user->id)
                                       ->where('book_id', $book->id)
@@ -141,7 +142,7 @@ class ClientController extends Controller
         if($book->quantity <= 0) {
             return redirect()->back()->with('error', 'Este livro está indisponível e não pode ser emprestado.');
         }
-        
+
         $reservation = Reservation::where('user_id', $user->id)
                                   ->where('book_id', $book->id)
                                   ->where(function($query){
@@ -153,7 +154,7 @@ class ClientController extends Controller
         if($reservation && now()->gt($reservation->expiration_date))
         {
             $user->incrementFailedReservations();
-            
+
             $reservation->status = ReservationType::EXPIRED->value;
             $reservation->save();
 
@@ -179,7 +180,7 @@ class ClientController extends Controller
 
             // Envia um e-mail de notificação
 
-        }                   
+        }
         return redirect()->route('client.loans')->with('success','Empréstimo realizado com sucesso.');
     }
 
@@ -199,12 +200,12 @@ class ClientController extends Controller
     {
         $loan = Loan::where('id', $loanId)->where('user_id', Auth::id())->firstOrFail();
 
-        if(!$loan) 
+        if (!$loan)
         {
             return redirect()->back()->with('error','Empréstimo não encontrado ou não corresponde ao usuário');
         }
 
-        if($loan->returned) 
+        if ($loan->returned)
         {
             return redirect()->back()->with('error','Este livro já foi devolvido');
         }

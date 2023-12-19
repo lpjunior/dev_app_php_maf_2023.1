@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Reservation;
 use App\Rules\ValidISBN;
@@ -14,7 +15,7 @@ class BookController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Exibe uma lista de todos os livros
     */

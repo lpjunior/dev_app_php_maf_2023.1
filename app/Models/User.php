@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 enum UserType: string {
     case CLIENT = 'client';
     case ADMIN = 'admin';
 }
 
-class User extends Authenticatable implements MustVerifyEmailContract
+class User extends Authenticatable implements MustVerifyEmailContract, JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, MustVerifyEmail;
 
@@ -51,12 +52,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
         'password' => 'hashed',
     ];
 
-    public function isAdmin(): bool 
+    public function isAdmin(): bool
     {
         return $this->type === UserType::ADMIN->value;
     }
 
-    public function isClient(): bool 
+    public function isClient(): bool
     {
         return $this->type === UserType::CLIENT->value;
     }
@@ -94,5 +95,15 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function canReserveBook(): bool
     {
         return $this->reservation_ban_until === null || $this->reservation_ban_until->isPast();
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

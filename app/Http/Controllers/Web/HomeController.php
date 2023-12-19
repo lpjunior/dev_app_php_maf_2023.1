@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +31,7 @@ class HomeController extends Controller
             return redirect()->route('admin.dashboard');
         elseif($user->isClient())
             return redirect()->route('client.dashboard');
-        
+
         return redirect()->route('client.books.index');
     }
 }

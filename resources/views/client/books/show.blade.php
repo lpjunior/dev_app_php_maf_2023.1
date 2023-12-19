@@ -4,7 +4,7 @@
     .reviews-section {
         margin-top: 2rem;
     }
-    
+
     .reviews-section h3 {
         margin-bottom: 1rem;
     }
@@ -88,10 +88,10 @@
                 <p>Quantidade: <span class="{{ $book->quantity <= 0 ? 'text-danger' : 'text-success' }}">{{ $book->quantity }}</span></p>
             </div>
             <div class="col-md-4 text-md-right">
-                @if($book->quantity <= 0)
+                @if($book->quantity > 0)
                 <a href="{{ route('client.loan.form', $book) }}" class="btn btn-dark">Pegar Empréstimo</a>
                 @endif
-                @if($book->quantity > 0)
+                @if($book->quantity <= 0)
                 <a href="{{ route('client.reserve.form', $book) }}" class="btn btn-dark">Reservar Livro</a>
                 @endif
             </div>

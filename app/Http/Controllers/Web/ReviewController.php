@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Review;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class ReviewController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function review(Book $book)
     {
         return view('client.books.review.form', compact('book'));
@@ -27,8 +28,8 @@ class ReviewController extends Controller
         ]);
 
         $review = new Review([
-            'user_id' => Auth::id(), 
-            'rating' => $request->rating, 
+            'user_id' => Auth::id(),
+            'rating' => $request->rating,
             'comment' => $request->comment
         ]);
 

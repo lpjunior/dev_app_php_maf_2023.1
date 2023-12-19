@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Web\AdminController;
+use App\Http\Controllers\Web\BookController;
+use App\Http\Controllers\Web\ClientController;
+use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\ReportController;
+use App\Http\Controllers\Web\ReviewController;
+use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,7 +48,7 @@ Route::get('/home', [HomeController::class, 'index']);
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['verified', 'client'])->group(function() {    
+Route::middleware(['verified', 'client'])->group(callback: function () {
     // Dashboard Admin
     Route::get('/client/dashboard', [ClientController::class,'dashboard'])->name('client.dashboard');
 
@@ -57,22 +57,22 @@ Route::middleware(['verified', 'client'])->group(function() {
 
     // Formulário para fazer reserva
     Route::get('/books/{book}/reserve', [ClientController::class,'showReservationForm'])->name('client.reserve.form');
-    
+
     // Enviar reserva
     Route::post('/books/{book}/reserve', [ClientController::class,'reserve'])->name('client.reserve');
-    
+
     // Listagem de reservas
     Route::get('/client/reservations', [ClientController::class,'reservations'])->name('client.reservations');
 
     // Formulário para fazer empréstimo
     Route::get('/books/{book}/loan', [ClientController::class,'showLoanForm'])->name('client.loan.form');
-    
+
     // Enviar empréstimo
     Route::post('/books/{book}/loan', [ClientController::class,'loan'])->name('client.loan');
 
     // devolver empréstimo
     Route::post('/client/return-loan/{loan}', [ClientController::class,'returnLoan'])->name('client.returnLoan');
-    
+
     // Listagem de empréstimos
     Route::get('/client/loans', [ClientController::class,'loans'])->name('client.loans');
 
@@ -87,8 +87,8 @@ Route::middleware(['verified', 'client'])->group(function() {
 | Rotas do Administrador
 |--------------------------------------------------------------------------
 */
-Route::middleware(['verified', 'admin'])->group(function() {    
-    
+Route::middleware(['verified', 'admin'])->group(function () {
+
     ###Rota da home do admin
 
     // Dashboard Admin
@@ -112,13 +112,13 @@ Route::middleware(['verified', 'admin'])->group(function() {
 
     // Listar todos os livros
     Route::get('/admin/books', [BookController::class,'index'])->name('admin.books.index');
-    
+
     // Formulário para criar um novo livro
     Route::get('/admin/books/create', [BookController::class,'create'])->name('admin.books.create');
-    
+
     // Enviar novo livro
-    Route::post('/admin/books/create', [BookController::class,'store'])->name('admin.books.create');    
-    
+    Route::post('/admin/books/create', [BookController::class, 'store'])->name('admin.books.create');
+
     // Formulário para editar livro
     Route::get('/admin/books/edit/{book}', [BookController::class, 'edit'])->name('admin.books.edit');
 
@@ -142,10 +142,10 @@ Route::middleware(['verified', 'admin'])->group(function() {
 
     // Formulário para criar um novo usuario
     Route::get('/admin/users/create', [UserController::class,'create'])->name('admin.users.create');
-    
+
     // Enviar novo usuario
-    Route::post('/admin/users/create', [UserController::class,'store'])->name('admin.users.create');    
-    
+    Route::post('/admin/users/create', [UserController::class, 'store'])->name('admin.users.create');
+
     // Formulário para editar usuario
     Route::get('/admin/users/edit/{user}', [UserController::class, 'edit'])->name('admin.users.edit');
 
